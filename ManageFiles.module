@@ -8,11 +8,12 @@ class ManageFiles extends Process implements Module {
 	 */
 	public static function getModuleInfo() {
 		return array(
-			'title' => 'Manage Files', 
-			'version' => '1.07', 
+			'title' => 'Manage Files',
+			'version' => '1.07',
 			'summary' => 'Let you manage your files more easily',
-			'singular' => true, 
-			'autoload' => false, 
+			'singular' => true,
+			'autoload' => false,
+			'permission' => 'managefiles',
 			);
 	}
 
@@ -44,7 +45,7 @@ class ManageFiles extends Process implements Module {
 		$table = $this->modules->get('MarkupAdminDataTable');
 		$table->setSortable(true); 
 		$table->setEncodeEntities(false);
-		$header = array('Preview','Name','Size','on Page','Link','Delete');
+		$header = array('Preview','View','Description','Name','Size','on Page','Delete');
 		$table->headerRow($header);
 		
 		// get all templates that have 1 or more file fields
@@ -77,11 +78,11 @@ class ManageFiles extends Process implements Module {
 								$table->row(array(
 									// make preview size with configurable module
 									'<a class="fancybox" href="'.$f->url.'"><img src="'.$f->size(100,0)->url.'"/></a>',
+									'<a target="blank" href="'.$f->url.'">View</a>',
+									basename($f->description),
 									basename($f->url),
 									round(($f->get('filesize')/1024)/1024,2).' MB',
 								 	'<a target="blank" href="'.$page->url.'">'.$page->get("title|name").'</a>',
-								 	
-									'<a target="blank" href="'.$f->url.'">Link</a>',
 									'<input type="checkbox" name="delete[]" value="'.$page->id.'|'.$field->name.'|'.$f->name.'" />'
 								));	
 							}
@@ -96,12 +97,11 @@ class ManageFiles extends Process implements Module {
 							foreach($file as $f) {
 								$table->row(array(
 									'<a class="fancybox_iframe" href="'.$f->url.'">'.basename($f->url).'</a>',
+									'<a target="blank" href="'.$f->url.'">View</a>',
+									basename($f->description),
 									basename($f->url),
-									
 									round(($f->get('filesize')/1024)/1024,2).' MB',
 								 	'<a target="blank" href="'.$page->url.'">'.$page->get("title|name").'</a>',
-								 	
-									'<a target="blank" href="'.$f->url.'">Link</a>',
 									'<input type="checkbox" name="delete[]" value="'.$page->id.'|'.$field->name.'|'.$f->name.'" />'
 								));	
 							}
